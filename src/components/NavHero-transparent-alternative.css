@@ -1,0 +1,70 @@
+/* ALTERNATIVE VERSION - TRANSPARENT BACKGROUND */
+/* Replace NavHero.css content with this if you prefer transparent background */
+
+.nav-video-background {
+    position: relative;
+    height: 60px;
+    width: 60px;
+    overflow: visible; /* Changed from hidden to visible */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    background: transparent;
+}
+
+.nav-video-background video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    transform: translateX(-50%) translateY(-50%);
+    background-size: cover;
+    object-fit: contain;
+    background: transparent;
+    /* Remove mix-blend-mode to avoid black background showing */
+    opacity: 1;
+    /* Add drop shadow for better visibility on light backgrounds */
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.nav-video-overlay {
+    position: relative;
+    z-index: 1;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+/* Simple BLOTIC text for navbar */
+.nav-simple-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1rem;
+    font-weight: 900;
+    background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    z-index: 10;
+    pointer-events: none;
+    letter-spacing: 0.02rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-video-background {
+        width: 52px;
+        height: 52px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-video-background {
+        width: 48px;
+        height: 48px;
+    }
+}

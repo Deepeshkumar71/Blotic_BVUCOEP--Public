@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification System Test - BLOTIC</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            color: #a78bfa;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #cbd5e0;
+        }
+
+        .test-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .test-section h2 {
+            color: #a78bfa;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #cbd5e0;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #a78bfa;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: #a78bfa;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #9370db;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: rgba(167, 139, 250, 0.2);
+            margin-left: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(167, 139, 250, 0.3);
+        }
+
+        .response {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .response.success {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.5);
+            color: #4ade80;
+        }
+
+        .response.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #f87171;
+        }
+
+        .response.info {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            color: #60a5fa;
+        }
+
+        .response pre {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+
+        .code-display {
+            background: rgba(167, 139, 250, 0.1);
+            border: 2px dashed rgba(167, 139, 250, 0.5);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .code-display .code {
+            font-size: 36px;
+            font-weight: bold;
+            color: #a78bfa;
+            letter-spacing: 8px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .instructions {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .instructions h3 {
+            color: #60a5fa;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            color: #cbd5e0;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(167, 139, 250, 0.2);
+        }
+
+        .stat-card .label {
+            color: #9ca3af;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .value {
+            color: #a78bfa;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Email Verification System Test</h1>
+            <p>Test the BLOTIC email verification flow</p>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 Testing Instructions:</h3>
+            <ol>
+                <li>Enter your email address (UUID is optional - leave empty or generate one)</li>
+                <li>Click "Send Verification Code" to trigger the email</li>
+                <li>Check your email inbox for the 6-digit code</li>
+                <li><strong>⚠️ Step 2 verification won't work here due to RLS policies</strong></li>
+                <li>To test full verification flow, use the actual registration page at <code>/register</code></li>
+            </ol>
+            <p style="margin-top: 10px; color: #9ca3af; font-size: 14px;">
+                💡 <strong>Note:</strong> The User ID field is optional. <strong>Leave it empty for testing</strong> - it will work fine! 
+                In the real app, it's automatically filled during registration.
+            </p>
+            <div style="margin-top: 15px; padding: 15px; background: rgba(234, 179, 8, 0.1); border-left: 4px solid #eab308; border-radius: 4px;">
+                <p style="color: #fbbf24; margin: 0; font-size: 14px;">
+                    <strong>⚠️ Limitation:</strong> This test page can only test email sending. Code verification requires authentication.
+                    <br><br>
+                    <strong>To test the complete flow:</strong> Run <code>npm run dev</code> and register at <code>http://localhost:5173/register</code>
+                </p>
+            </div>
+        </div>
+
+        <!-- Step 1: Send Verification Code -->
+        <div class="test-section">
+            <h2>Step 1: Send Verification Code</h2>
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" placeholder="test@example.com" value="">
+            </div>
+            <div class="form-group">
+                <label for="userId">User ID (UUID) - Optional:</label>
+                <input type="text" id="userId" placeholder="Leave empty or click 'Generate UUID'" value="">
+                <button class="btn btn-secondary" onclick="generateUUID()" style="margin-top: 8px;">Generate Test UUID</button>
+            </div>
+            <button class="btn" onclick="sendVerificationCode()">Send Verification Code</button>
+            <button class="btn btn-secondary" onclick="clearForm()">Clear</button>
+            
+            <div id="sendResponse" class="response"></div>
+            
+            <div id="codeDisplay" class="code-display" style="display: none;">
+                <p style="color: #cbd5e0; margin-bottom: 10px;">Verification Code (for testing):</p>
+                <div class="code" id="displayedCode">------</div>
+                <p style="color: #9ca3af; margin-top: 10px; font-size: 12px;">This is only shown in test mode</p>
+            </div>
+        </div>
+
+        <!-- Step 2: Verify Code -->
+        <div class="test-section">
+            <h2>Step 2: Verify Code</h2>
+            <div class="form-group">
+                <label for="verifyEmail">Email Address:</label>
+                <input type="email" id="verifyEmail" placeholder="test@example.com">
+            </div>
+            <div class="form-group">
+                <label for="verifyCode">Verification Code (6 digits):</label>
+                <input type="text" id="verifyCode" placeholder="123456" maxlength="6" pattern="[0-9]{6}">
+            </div>
+            <button class="btn" onclick="verifyCode()">Verify Code</button>
+            <button class="btn btn-secondary" onclick="checkCodeStatus()">Check Code Status</button>
+            
+            <div id="verifyResponse" class="response"></div>
+        </div>
+
+        <!-- Step 3: Database Query -->
+        <div class="test-section">
+            <h2>Step 3: Query Verification Codes</h2>
+            <div class="form-group">
+                <label for="queryEmail">Email Address:</label>
+                <input type="email" id="queryEmail" placeholder="test@example.com">
+            </div>
+            <button class="btn" onclick="queryVerificationCodes()">Query Database</button>
+            <button class="btn btn-secondary" onclick="deleteExpiredCodes()">Delete Expired Codes</button>
+            
+            <div id="queryResponse" class="response"></div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="test-section">
+            <h2>📊 Test Statistics</h2>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="label">Codes Sent</div>
+                    <div class="value" id="statSent">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Codes Verified</div>
+                    <div class="value" id="statVerified">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Failed Attempts</div>
+                    <div class="value" id="statFailed">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Last Code</div>
+                    <div class="value" id="statLastCode">---</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://sbdrzesfuweacfssdwzk.supabase.co';
+        const SUPABASE_ANON_KEY = 'your_supabase_anon_key';
+
+        let stats = {
+            sent: 0,
+            verified: 0,
+            failed: 0,
+            lastCode: '---'
+        };
+
+        function updateStats() {
+            document.getElementById('statSent').textContent = stats.sent;
+            document.getElementById('statVerified').textContent = stats.verified;
+            document.getElementById('statFailed').textContent = stats.failed;
+            document.getElementById('statLastCode').textContent = stats.lastCode;
+        }
+
+        function showResponse(elementId, type, message, data = null) {
+            const element = document.getElementById(elementId);
+            element.className = `response ${type}`;
+            element.style.display = 'block';
+            
+            let html = `<strong>${type.toUpperCase()}:</strong> ${message}`;
+            if (data) {
+                html += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            }
+            element.innerHTML = html;
+        }
+
+        async function sendVerificationCode() {
+            const email = document.getElementById('email').value;
+            const userId = document.getElementById('userId').value;
+
+            if (!email) {
+                showResponse('sendResponse', 'error', 'Please enter an email address');
+                return;
+            }
+
+            showResponse('sendResponse', 'info', 'Sending verification code...');
+
+            try {
+                const response = await fetch(`${SUPABASE_URL}/functions/v1/send-verification-code`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        user_id: userId || null
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    stats.sent++;
+                    if (data.code) {
+                        stats.lastCode = data.code;
+                        document.getElementById('displayedCode').textContent = data.code;
+                        document.getElementById('codeDisplay').style.display = 'block';
+                    }
+                    updateStats();
+                    showResponse('sendResponse', 'success', 'Verification code sent successfully! Check your email.', data);
+                    
+                    // Auto-fill verify form
+                    document.getElementById('verifyEmail').value = email;
+                } else {
+                    stats.failed++;
+                    updateStats();
+                    showResponse('sendResponse', 'error', 'Failed to send verification code', data);
+                }
+            } catch (error) {
+                stats.failed++;
+                updateStats();
+                showResponse('sendResponse', 'error', `Error: ${error.message}`);
+            }
+        }
+
+        async function verifyCode() {
+            const email = document.getElementById('verifyEmail').value;
+            const code = document.getElementById('verifyCode').value;
+
+            if (!email || !code) {
+                showResponse('verifyResponse', 'error', 'Please enter email and verification code');
+                return;
+            }
+
+            if (code.length !== 6) {
+                showResponse('verifyResponse', 'error', 'Verification code must be 6 digits');
+                return;
+            }
+
+            showResponse('verifyResponse', 'info', 'Verifying code...');
+
+            try {
+                // Query Supabase to verify code
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/email_verification_codes?email=eq.${email}&verification_code=eq.${code}&verified_at=is.null&expires_at=gt.${new Date().toISOString()}&order=created_at.desc&limit=1`, {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data && data.length > 0) {
+                    // Mark as verified
+                    const updateResponse = await fetch(`${SUPABASE_URL}/rest/v1/email_verification_codes?id=eq.${data[0].id}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                        },
+                        body: JSON.stringify({
+                            verified_at: new Date().toISOString()
+                        })
+                    });
+
+                    if (updateResponse.ok) {
+                        stats.verified++;
+                        updateStats();
+                        showResponse('verifyResponse', 'success', '✅ Email verified successfully! Welcome email will be sent.', data[0]);
+                    } else {
+                        stats.failed++;
+                        updateStats();
+                        showResponse('verifyResponse', 'error', 'Failed to update verification status');
+                    }
+                } else {
+                    stats.failed++;
+                    updateStats();
+                    showResponse('verifyResponse', 'error', 'Invalid or expired verification code');
+                }
+            } catch (error) {
+                stats.failed++;
+                updateStats();
+                showResponse('verifyResponse', 'error', `Error: ${error.message}`);
+            }
+        }
+
+        async function checkCodeStatus() {
+            const email = document.getElementById('verifyEmail').value;
+
+            if (!email) {
+                showResponse('verifyResponse', 'error', 'Please enter an email address');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/email_verification_codes?email=eq.${email}&order=created_at.desc&limit=5`, {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    }
+                });
+
+                const data = await response.json();
+                showResponse('verifyResponse', 'info', `Found ${data.length} verification code(s) for this email`, data);
+            } catch (error) {
+                showResponse('verifyResponse', 'error', `Error: ${error.message}`);
+            }
+        }
+
+        async function queryVerificationCodes() {
+            const email = document.getElementById('queryEmail').value;
+
+            let url = `${SUPABASE_URL}/rest/v1/email_verification_codes?order=created_at.desc&limit=10`;
+            if (email) {
+                url += `&email=eq.${email}`;
+            }
+
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    }
+                });
+
+                const data = await response.json();
+                showResponse('queryResponse', 'success', `Found ${data.length} verification code(s)`, data);
+            } catch (error) {
+                showResponse('queryResponse', 'error', `Error: ${error.message}`);
+            }
+        }
+
+        async function deleteExpiredCodes() {
+            showResponse('queryResponse', 'info', 'Deleting expired codes...');
+
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/email_verification_codes?expires_at=lt.${new Date().toISOString()}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    }
+                });
+
+                if (response.ok) {
+                    showResponse('queryResponse', 'success', 'Expired codes deleted successfully');
+                } else {
+                    showResponse('queryResponse', 'error', 'Failed to delete expired codes');
+                }
+            } catch (error) {
+                showResponse('queryResponse', 'error', `Error: ${error.message}`);
+            }
+        }
+
+        function generateUUID() {
+            // Generate a random UUID v4
+            const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+            document.getElementById('userId').value = uuid;
+            showResponse('sendResponse', 'info', `Generated test UUID: ${uuid}`);
+        }
+
+        function clearForm() {
+            document.getElementById('email').value = '';
+            document.getElementById('userId').value = '';
+            document.getElementById('sendResponse').style.display = 'none';
+            document.getElementById('codeDisplay').style.display = 'none';
+        }
+
+        // Initialize
+        updateStats();
+    </script>
+</body>
+</html>

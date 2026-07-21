@@ -1,0 +1,51 @@
+@echo off
+REM Blotic BVUCOEP - Local Development Setup Script (Windows)
+REM This script sets up your local Supabase environment
+
+echo 🚀 Setting up Blotic BVUCOEP local development environment...
+
+REM Check if Supabase CLI is installed
+supabase --version >nul 2>&1
+if %errorlevel% neq 0 (
+    echo ❌ Supabase CLI is not installed. Please install it first:
+    echo    npm install -g supabase
+    echo    Or visit: https://supabase.com/docs/guides/cli/getting-started
+    exit /b 1
+)
+
+echo ✅ Supabase CLI found
+
+REM Check if Docker is running
+docker info >nul 2>&1
+if %errorlevel% neq 0 (
+    echo ❌ Docker is not running. Please start Docker Desktop first.
+    exit /b 1
+)
+
+echo ✅ Docker is running
+
+REM Start Supabase local development
+echo 🔄 Starting Supabase local development environment...
+supabase start
+
+if %errorlevel% equ 0 (
+    echo.
+    echo 🎉 Local development environment is ready!
+    echo.
+    echo 📊 Supabase Studio: http://localhost:54323
+    echo 🔗 API URL: http://localhost:54321
+    echo 📧 Inbucket ^(Email testing^): http://localhost:54324
+    echo.
+    echo 🔑 To get your local API keys:
+    echo    supabase status
+    echo.
+    echo 📝 Next steps:
+    echo    1. Update your .env.local with local API keys
+    echo    2. Run 'npm run dev' to start your React app
+    echo    3. Visit http://localhost:3000 to see your app
+    echo.
+) else (
+    echo ❌ Failed to start Supabase local environment
+    echo 💡 Try running: supabase stop && supabase start
+    exit /b 1
+)

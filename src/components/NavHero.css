@@ -1,0 +1,59 @@
+.nav-video-background {
+    position: relative;
+    height: 48px;
+    width: 48px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 0, 0, 0.8);
+    background: transparent;
+}
+
+.nav-video-background video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 105%;
+    height: 110%;
+    z-index: 1;
+    transform: translateX(-50%) translateY(-50%);
+    object-fit: cover;
+    background: transparent;
+    mix-blend-mode: lighten;
+    opacity: 1;
+}
+
+.nav-video-overlay {
+    position: relative;
+    z-index: 1;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+/* Simple BLOTIC text for navbar */
+.nav-simple-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1rem;
+    font-weight: 900;
+    background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    z-index: 10;
+    pointer-events: none;
+    letter-spacing: 0.02rem;
+}
+
+/* Responsive Design - Match profile picture sizes */
+@media (min-width: 640px) {
+    .nav-video-background {
+        width: 56px;
+        height: 56px;
+    }
+}

@@ -1,0 +1,41 @@
+name: Ping Supabase to Prevent Pausing
+
+on:
+  schedule:
+    - cron: '0 * * * *' # Runs at the start of every hour, every day.
+  workflow_dispatch: # Allows manual triggering from the Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Ping Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_KEY" ]; then
+            echo "Supabase secrets are not set. Skipping ping."
+            exit 0
+          fi
+          
+          # Use curl to ping the Supabase project
+          # -sS hides progress bar but shows error messages
+          # || true prevents the script from exiting immediately if curl fails (due to set -e)
+          HTTP_STATUS=$(curl -sS -o /dev/null -w "%{http_code}" -X GET "$SUPABASE_URL/rest/v1/profiles?select=id&limit=1" \
+            -H "apikey: $SUPABASE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_KEY" || echo "000")
+            
+          echo "HTTP Status: $HTTP_STATUS"
+          
+          # If status is >= 400, it might be an error, but as long as we reached the server, it keeps it alive.
+          # However, 000 means failed to connect.
+          if [ "$HTTP_STATUS" = "000" ]; then
+            echo "Failed to connect to Supabase. Please check if your SUPABASE_URL and SUPABASE_KEY are correct in the repository secrets."
+            exit 1
+          fi
+          
+          echo "Successfully pinged Supabase"

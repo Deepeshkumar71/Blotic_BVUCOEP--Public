@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Start Supabase local development setup
+        run: supabase db start
+
+      - name: Verify generated types are checked in
+        run: |
+          supabase gen types typescript --local > types.gen.ts
+          if ! git diff --ignore-space-at-eol --exit-code --quiet types.gen.ts; then
+            echo "Detected uncommitted changes after build. See status below:"
+            git diff
+            exit 1
+          fi
+
+      - name: Run database tests
+        run: |
+          # Add your database tests here
+          # Example: supabase test db
+          echo "Database tests would run here"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Run tests
+        run: |
+          # Add your application tests here
+          # Example: npm test
+          echo "Application tests would run here"

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Email Function</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Email Function</h1>
+    
+    <div>
+        <label>Email:</label>
+        <input type="email" id="email" placeholder="your@email.com" value="test@example.com">
+        
+        <label>Full Name:</label>
+        <input type="text" id="fullName" placeholder="Your Name" value="Test User">
+        
+        <button onclick="testEmail()">Send Test Email</button>
+    </div>
+    
+    <div id="result"></div>
+
+    <script>
+        async function testEmail() {
+            const resultDiv = document.getElementById('result');
+            const email = document.getElementById('email').value;
+            const fullName = document.getElementById('fullName').value;
+            
+            resultDiv.textContent = 'Sending...';
+            resultDiv.className = '';
+            
+            try {
+                const response = await fetch('https://sbdrzesfuweacfssdwzk.supabase.co/functions/v1/send-welcome-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer your_supabase_anon_key'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        full_name: fullName,
+                        user_id: 'test-123'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.className = 'success';
+                    resultDiv.textContent = '✅ SUCCESS!\n\n' + JSON.stringify(data, null, 2);
+                } else {
+                    resultDiv.className = 'error';
+                    resultDiv.textContent = '❌ ERROR!\n\n' + JSON.stringify(data, null, 2);
+                }
+            } catch (error) {
+                resultDiv.className = 'error';
+                resultDiv.textContent = '❌ NETWORK ERROR!\n\n' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

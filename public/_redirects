@@ -1,0 +1,6 @@
+# Fallback for all routes to support React Router
+/*    /index.html   200
+
+# Optional: Redirect common variations to canonical URLs
+/home    /    301
+/index    /    301
