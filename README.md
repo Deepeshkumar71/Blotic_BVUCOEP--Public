@@ -1,5 +1,7 @@
 # 🚀 BLOTIC - Blockchain & Web3 Club Platform
 
+> ⚠️ **Note:** This is a public version of the original private repository. Sensitive information and secret keys have been removed.
+
 > **Bharati Vidyapeeth's Premier Blockchain & Web3 Club Management System**
 
 A modern, full-stack web application built for managing blockchain and Web3 club activities, events, and community engagement.
